@@ -1,2 +1,4 @@
 /.idea/
-Dockerfile
+create-images.sh
+/docker
+docker-compose.yml
