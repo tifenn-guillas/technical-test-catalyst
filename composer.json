@@ -1,0 +1,23 @@
+{
+  "name": "technical-test-catalyst",
+  "type": "library",
+  "description": "Technical test",
+  "keywords": [],
+  "homepage": "http://tifenn-guillas.fr/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tifenn Guillas",
+      "email": "tifenn.guillas@gmail.com",
+      "homepage": "https://github.com/tifenn-guillas"
+    }
+  ],
+  "require": {
+    "doctrine/orm": "^2.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Catalyst\\": "src/"
+    }
+  }
+}

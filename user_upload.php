@@ -1,4 +1,13 @@
 <?php
+require_once "vendor/autoload.php";
+
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
+use Catalyst\ArgsManager;
+use Catalyst\App;
+
+$paths = array("./src/Entity");
+$isDevMode = false;
 
 $shortOpts = "h:";  // MySQL host required
 $shortOpts .= "u:"; // MySQL username required
@@ -12,58 +21,22 @@ $longOpts  = array(
 );
 
 $options = getopt($shortOpts, $longOpts);
+$options['program'] = $argv[0];
 
-if (array_key_exists('help', $options)) {
-    displayUsage($argv[0]);
-}
+$argsManager = new ArgsManager($options);
+$params = $argsManager->getParams();
 
-// Check presence of args
-if ((!array_key_exists('h', $options) or !array_key_exists('u', $options) or !array_key_exists('p', $options))
-    or (array_key_exists('create_table', $options) and array_key_exists('file', $options))  // create_table and file are present
-    or (!array_key_exists('create_table', $options) and !array_key_exists('file', $options)))   // create_table and file are absent
-{
-    displayUsage($argv[0]);
-}
+// the connection configuration
+$dbParams = array(
+    'driver'   => 'pdo_mysql',
+    'host'     => $params['h'],
+    'database' => $params['db'],
+    'user'     => $params['u'],
+    'password' => $params['p'],
+);
 
-// Check MySQL connection
-try {
-    $dbh = new PDO('mysql:host=' . $options['h'], $options['u'], $options['p']);
-} catch (PDOException $e) {
-    echo 'Connection failed: ' . $e->getMessage() . PHP_EOL;
-    exit;
-}
+$config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+$entityManager = EntityManager::create($dbParams, $config);
 
-// Check value of file if necessary
-if (array_key_exists('file', $options)) {
-    if ($options['file'] == '--create_table' or $options['file'] == '--dry_run') {
-        displayUsage($argv[0]);
-    }
-    if (!file_exists($options['file'])) {
-        echo 'No such file or directory in ' . $options['file'] . PHP_EOL;
-        exit;
-    }
-}
-
-var_dump($options); // TODO: remove this line
-
-function displayUsage($program) {
-    echo "
-This program store into a MySQL database users data provided by a CSV file.
-
-  Usage:
-  $program --help
-  $program -h <host> -u <username> -p <password> --create_table
-  $program -h <host> -u <username> -p <password> [--dry_run] --file <filename>
-  
-  Options:
-  --help                This help.
-  -h <host>             MySQL host.
-  -u <username>         MySQL username.
-  -p <password>         MySQL password. 
-  --create_table        Create the users table to MySQL.
-  --file <filename>     Path to the CSV file to be parsed.
-  --dry_run             Run the script without store users in MySQL.
-  \n
-";
-    exit;
-}
+$app = new App($entityManager, $argsManager);
+$app->run();

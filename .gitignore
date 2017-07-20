@@ -1,4 +1,6 @@
 /.idea/
 create-images.sh
-/docker
+Dockerfile
 docker-compose.yml
+/vendor
+user_upload_old.php
