@@ -32,8 +32,7 @@ class App
 
     public function run() {
         if ($this->argsManager->getCreateTable()) {
-            // TODO: create table
-            echo 'CREATE TABLE' . PHP_EOL;
+            $this->createTable();
         } else {
             $this->parseFile();
         }
@@ -55,7 +54,13 @@ class App
         }
     }
 
-    private function createTable() {}
+    private function createTable() {
+        $metadata = $this->em->getClassMetadata('Catalyst\Entity\User');
+        $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $schemaTool->dropSchema(array($metadata));
+        $schemaTool->createSchema(array($metadata));
+        echo 'Table `Users` created.' . PHP_EOL;
+    }
 
     private function parseFile() {
         $file = fopen($this->argsManager->getFile(), 'r');
@@ -71,8 +76,12 @@ class App
         }
         fclose($file);
         if (!$this->argsManager->getDryRun()) {
-//            $this->em->flush(); // TODO: test ORM
-            echo PHP_EOL . 'All correct records are stored.' . PHP_EOL;
+            try {
+                $this->em->flush();
+                echo PHP_EOL . 'All correct records are stored.' . PHP_EOL;
+            } catch (\Exception $e) {
+                exit('Record in database failed: ' . $e->getMessage() . PHP_EOL);
+            }
         }
     }
 
