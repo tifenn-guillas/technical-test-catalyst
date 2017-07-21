@@ -30,7 +30,7 @@ $params = $argsManager->getParams();
 $dbParams = array(
     'driver'   => 'pdo_mysql',
     'host'     => $params['h'],
-    'database' => $params['db'],
+    'dbname' => $params['db'],
     'user'     => $params['u'],
     'password' => $params['p'],
 );

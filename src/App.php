@@ -40,14 +40,11 @@ class App
     }
 
     private function checkDatabaseConnection() {
-//        try {
-//            $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->database;
-//            $dbh = new \PDO($dsn, $this->username, $this->password);
-//            $dbh = null;
-//        } catch (\PDOException $e) {
-//            echo 'Connection failed: ' . $e->getMessage() . PHP_EOL;
-//            exit;
-//        }
+        try {
+            $this->em->getConnection()->connect();
+        } catch (\Exception $e) {
+            exit('Connection failed: ' . $e->getMessage() . PHP_EOL);
+        }
     }
 
     private function checkExistingFile() {
