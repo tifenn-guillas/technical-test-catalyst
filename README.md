@@ -20,7 +20,7 @@ This command install the project and its dependencies.
 
 - **CSV file columns**: I assumed there is only 3 columns, otherwise the file is considered as invalid. I assumed too, the first column is for the name, the second for the surname, and the last one for the email.
 - **Database**: the name of the database is not given, so I called it 'catalyst'. It can be changed on the file `src/ArgsManager.php`.
-- **Command create_table**: if a table 'Users' already exist, this one will be deleted with all of its data, and another one will be rebuilt without any data.
+- **Command create_table**: if a table 'Users' already exists, this one will be deleted with all of its data, and another one will be rebuilt without any data.
 - **Email validation**: I followed PHP directive, see [PHP documentation][2] for more details. 
 
 ## Author

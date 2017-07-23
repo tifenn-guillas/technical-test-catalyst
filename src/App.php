@@ -80,7 +80,7 @@ class App
                 $this->em->flush();
                 echo PHP_EOL . 'All correct records are stored.' . PHP_EOL;
             } catch (\Exception $e) {
-                exit('Record in database failed: ' . $e->getMessage() . PHP_EOL);
+                exit('Record in database cancelled: ' . $e->getMessage() . PHP_EOL);
             }
         }
     }
