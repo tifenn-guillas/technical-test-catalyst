@@ -12,6 +12,11 @@ php composer.phar install
 ```
 This command install the project and its dependencies.
 
+To launch programs, still on the project directory, type php + name of the program + options if required. For example:
+```console
+php user_upload.php --help
+```
+
 ## Dependencies
 
 - [Doctrine2][1]: ORM
